@@ -1,0 +1,72 @@
+﻿@model List<UserRegistration.Models.User>
+
+@{
+    ViewData["Title"] = "User Details";
+    var errorMessage = TempData["errorMessage"]?.ToString();
+    var successMessage = TempData["successMessage"]?.ToString();
+}
+
+<h3>@ViewData["Title"]?.ToString()</h3>
+<hr />
+@if (!string.IsNullOrWhiteSpace(successMessage))
+{
+    <div class="alert alert-success">
+        <b>Success :</b> @successMessage
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+else if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger">
+        <b>Error :</b> @errorMessage
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<form>
+    <button asp-action="Create" asp-controller="User" class="btn btn-primary mb-3">Create User</button>
+    <table class="table table-responsive table-bordered table-hover">
+        <thead>
+            <tr class="table-active">
+                <th class="text-center">UserId</th>
+                <th class="text-center">FullName</th>
+                <th class="text-center">Gender</th>
+                <th class="text-center">DOB</th>
+                <th class="text-center">State</th>
+                <th class="text-center">District</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Phone</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td class="text-center">@user.UserId</td>
+                        <td>@user.FullName</td>
+                        <td class="text-center">@user.Gender</td>
+                        <td class="text-center">@user.DateOfBirth ?.ToString("yyyy-MM-dd")</td>
+                        <td class="text-center">@user.State</td>
+                        <td class="text-center">@user.District</td>
+                        <td>@user.Email</td>
+                        <td class="text-center">@user.Phone</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a asp-controller="User" asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-primary">Edit</a>
+                                <a asp-controller="User" asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" class="text-center">No Users available at this moment!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
